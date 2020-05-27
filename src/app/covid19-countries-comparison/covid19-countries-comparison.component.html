@@ -1,0 +1,94 @@
+<div class="countries-comparison-container">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th scope="col">Country</th>
+        <th scope="col">Total Cases</th>
+        <th scope="col">Added Cases</th>
+        <th scope="col">Deaths</th>
+        <th scope="col">Recovered</th>
+        <th scope="col">Active</th>
+        <th scope="col">Death Percentage</th>
+        <th scope="col">Recovered Percentage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let each of eachCountryDetails; let i = index">
+        <th scope="row">{{ each.Country }}</th>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.Confirmed, 'Confirmed')
+          }"
+        >
+          {{ each.Confirmed | number }}
+        </td>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.AddedCases, 'AddedCases')
+          }"
+        >
+          {{ each.AddedCases | number }}
+        </td>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.Deaths, 'Deaths')
+          }"
+        >
+          {{ each.Deaths | number }}
+        </td>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.Recovered, 'Recovered')
+          }"
+        >
+          {{ each.Recovered | number }}
+        </td>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.Active, 'Active')
+          }"
+        >
+          {{ each.Active | number }}
+        </td>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.DeathP, 'DeathP')
+          }"
+        >
+          {{ each.DeathP | number: "1.1-1" }}%
+        </td>
+        <td
+          [ngStyle]="{
+            color: decideMaxAndMin(each.RecoveredP, 'RecoveredP')
+          }"
+        >
+          {{ each.RecoveredP | number: "1.1-1" }}%
+          <span
+            class="each-country-close-button"
+            (click)="removeCountryDetail(each)"
+            >&times;</span
+          >
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="footer-container">
+    <div class="legends-container">
+      <div class="legend-red-container">
+        <div class="legend-red"></div>
+        <p>The worst condition</p>
+      </div>
+      <div class="legend-green-container">
+        <div class="legend-green"></div>
+        <p>The best condition</p>
+      </div>
+    </div>
+    <button
+      class="btn btn-danger btn-sm close-button"
+      type="button"
+      (click)="closeComparison()"
+    >
+      Close
+    </button>
+  </div>
+</div>

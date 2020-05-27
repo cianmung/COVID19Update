@@ -1,0 +1,167 @@
+<div class="component-container">
+  <div class="search-bar-component-container col-sm-2 col-lg-2">
+    <div class="search-bar-wrapper">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search country"
+        [(ngModel)]="countryName"
+      />
+      <p>Select a country..</p>
+    </div>
+    <div class="country-list">
+      <ul class="list-group">
+        <li
+          *ngFor="let country of countries | countryDisplayFilter: countryName"
+          class="list-group-item"
+        >
+          <a (click)="getCountryDetail(country)">{{ country }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="main-context-component-container col-sm-10 col-lg-10">
+    <div class="main-context-header-container">
+      <div class="main-context-header-text">
+        <h1>Coronavirus(COVID19) World Wide Update</h1>
+      </div>
+      <div class="main-context-world-wide-update-container">
+        <div
+          class="main-context-total-cases main-context-world-wide-update-text"
+        >
+          <h2>Total Cases:</h2>
+          <h2 class="total-case-num">
+            {{ worldWideTotalData.TotalConfirmed | number }}
+          </h2>
+        </div>
+        <div
+          class="main-context-total-death main-context-world-wide-update-text"
+        >
+          <h2>Total Death:</h2>
+          <h2 class="total-death-num">
+            {{ worldWideTotalData.TotalDeaths | number }}
+          </h2>
+        </div>
+        <div
+          class="main-context-total-recovered main-context-world-wide-update-text"
+        >
+          <h2>Total Recovered:</h2>
+          <h2 class="total-recovered-num">
+            {{ worldWideTotalData.TotalRecovered | number }}
+          </h2>
+        </div>
+        <div
+          class="main-context-total-active main-context-world-wide-update-text"
+        >
+          <h2>Total Active:</h2>
+          <h2 class="total-active-num">
+            {{
+              worldWideTotalData.TotalConfirmed -
+                (worldWideTotalData.TotalRecovered +
+                  worldWideTotalData.TotalDeaths) | number
+            }}
+          </h2>
+        </div>
+        <div
+          class="main-context-total-country main-context-world-wide-update-text"
+        >
+          <h2>Total Country:</h2>
+          <h2 class="total-country-num">{{ countries.length | number }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="main-context-body-container" *ngIf="isComparison == false">
+      <div
+        *ngIf="eachCountryDetails.length <= 0"
+        class="main-context-empty-place-holder-container"
+      >
+        <div class="main-context-empty-place-holder">
+          <h1 class="bold-the-letters">
+            Please select a country in order to get more details.
+            <h3 style="display: flex; justify-content: center;">
+              The maximun number of country comparison is 4.
+            </h3>
+          </h1>
+        </div>
+      </div>
+      <div class="country-detail-component-container">
+        <div
+          *ngFor="let each of eachCountryDetails"
+          class="each-country-detail-component"
+        >
+          <button
+            type="button"
+            class="close each-country-detail-close-button"
+            aria-label="Close"
+            (click)="removeCountryDetail(each)"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="country-name-container">
+            <h3 class="bold-the-letters">{{ each.Country }}</h3>
+          </div>
+          <div class="country-detail-container">
+            <p>
+              Update Date:
+              <a class="bold-the-letters"> {{ each.Date | slice: 0:10 }}</a>
+            </p>
+            <p>
+              Total Cases:
+              <a class="total-case-num">{{ each.Confirmed | number }}</a>
+            </p>
+            <p>
+              Added Cases:
+              <a class="total-case-num">{{ each.AddedCases | number }}</a>
+            </p>
+            <p>
+              Deaths: <a class="total-death-num"> {{ each.Deaths | number }}</a>
+            </p>
+            <p>
+              Recovered:
+              <a class="total-recovered-num">{{ each.Recovered | number }}</a>
+            </p>
+            <p>
+              Active: <a class="total-active-num">{{ each.Active | number }}</a>
+            </p>
+            <p>
+              Death Percentage:
+              <a class="total-death-num"
+                >{{ each.DeathP | number: "1.1-1" }}%</a
+              >
+            </p>
+            <p>
+              Recovered Percentage:
+              <a class="total-recovered-num"
+                >{{ each.RecoveredP | number: "1.1-1" }}%</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main-context-compare-country-container" *ngIf="isComparison">
+      <app-covid19-countries-comparison
+        [eachCountryDetails]="getEachCountryDetails()"
+        (isComparison)="closeComparison($event)"
+        (errMessage)="handleCompareError($event)"
+      ></app-covid19-countries-comparison>
+    </div>
+    <div class="alert-container">
+      <div *ngIf="isError" class="alert alert-danger" role="alert">
+        {{ error }}
+      </div>
+    </div>
+    <div
+      *ngIf="eachCountryDetails.length >= 2 && !isComparison"
+      class="compare-button-container"
+    >
+      <input
+        class="btn btn-primary"
+        type="button"
+        value="Compare"
+        (click)="isComparisonHandle()"
+      />
+    </div>
+  </div>
+</div>
